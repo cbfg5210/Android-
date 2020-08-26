@@ -1,0 +1,23 @@
+git下载加速:
+github.com->github.com.cnpmjs.org
+
+取消缓存不想要跟踪的文件
+git rm -r --cached 文件
+
+查看远程仓库地址
+git remote -v
+
+查看本地所有分支
+git branch
+
+git branch -r 
+查看远程所有分支
+
+查看所有的分支
+git branch -a  
+
+git checkout dev 
+切换到本地dev分支
+
+git checkout --track origin/dev 
+切换到远程dev分支

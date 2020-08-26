@@ -1,0 +1,2 @@
+- DialogFragment中输入框被键盘部分遮挡解决办法：
+在theme style设置:<item name="android:windowIsFloating">false</item>

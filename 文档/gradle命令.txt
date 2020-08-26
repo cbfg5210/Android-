@@ -1,0 +1,2 @@
+加速运行安装：
+gradlew installDebug -x lint

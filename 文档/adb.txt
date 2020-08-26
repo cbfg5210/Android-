@@ -1,0 +1,198 @@
+指定设备
+adb -s <serial number> ...
+
+adb kill-server
+adb start-server
+adb tcpip 5555
+adb connect xxx.xxx.xxx.xxx:5555
+不用root的系统也可以WiFi调试
+
+list of registered content providers：
+adb shell dumpsys package providers > C:\Users\TY\Desktop\abc.txt
+
+查看CPU架构信息:
+adb shell cat /proc/cpuinfo
+
+修改data目录下权限：
+C:\Users\admin>adb shell 
+shell@android:/ $ su 
+root@android:/ # chmod 777 /data 
+
+关机:
+adb shell reboot -p
+
+获取系统屏幕亮度：
+adb shell "dumpsys power | grep mScreenBrightnessSetting" 
+
+adb shell input text "123456789"
+
+Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); intent.putExtra("android.intent.extras.CAMERA_FACING", 1); // 调用前置摄像头 startActivityForResult(intent, 1);
+
+指定设备执行 adb 命令:
+adb -s $deviceId shell ...
+
+输出带时间戳的 log
+adb logcat -v time process
+
+发送广播
+adb shell am broadcast -a xx.xx
+
+获取SN号:
+adb shell getprop ro.serialno
+
+获取机器MAC地址：
+adb shell  cat /sys/class/net/wlan0/address
+
+adb kill-server
+adb start-server
+
+查看应用对应的apk文件在手机上的安装位置及包名
+adb shell pm list packages -f
+
+查看手机上应用的packageName：
+adb shell pm list packages
+
+通过adb命令打印当前页面：
+
+·adb shell dumpsys activity 
+获取当前Android系统Activity栈中Activity信息,等价于依次输出下面 8 条命令:
+adb shell dumpsys activity intents //主要输出 PendingIntentRecord
+adb shell dumpsys activity broadcasts 
+adb shell dumpsys activity providers// Published single-user content providers (by class) / Published user 0 content providers (by class) /
+adb shell dumpsys activity permissions
+adb shell dumpsys activity services
+adb shell dumpsys activity recents
+adb shell dumpsys activity activities
+adb shell dumpsys activity processes
+
+adb shell dumpsys activity top
+获取当前 Android 系统中与用户交互的 Activity 的详细信息
+
+adb shell dumpsys activity activities
+显示当前所有在运行的任务栈，并可查看栈中所有的 Activity 的列表.它们的 id 分别是什么。对于每个 Task 也有 Activity 数量等信息，同时也列出了其中的 Activity 列表，并且对于每个 Activity 也有比较详细的描述，比如启动它的 Intent 的内容。如果觉得内容过多，只想看看栈的内容，也可以直接跳到「Running activities (most recent first) 那部分，比较简洁而又明了的列出了栈中的 Activity 列表，就能知道当按下返回键的时候会应该回到哪个 Activity 」
+
+adb shell dumpsys package $pkgName
+获取手机里面某个 apk 的应用信息、版本信息
+
+adb shell dumpsys meminfo
+查看应用的内存使用情况
+
+
+adb停止应用程序：
+adb shell am force-stop $pkgName
+
+
+列出所有系统apk:
+adb shell
+cd system/priv-app
+ls
+
+卸载桌面apk:
+
+//adb root
+//adb remount
+adb shell
+rm -rf Launcher_gelin.apk
+reboot
+
+
+https://hk.saowen.com/a/2b376dd507d696bf652779f7d1b04ea583dfd5adedef9ad9f0a10d16f272cdaa
+
+按級別過濾日誌:
+
+V —— Verbose（最低，輸出得最多）
+D —— Debug
+I —— Info
+W —— Warning
+E —— Error
+F —— Fatal
+S —— Silent（最高，啥也不輸出）
+
+adb logcat *:W
+
+
+HOME鍵：
+adb shell input keyevent 3
+
+返回鍵：
+adb shell input keyevent 4
+
+增加音量：
+adb shell input keyevent 24
+
+降低音量：
+adb shell input keyevent 25
+
+亮屏:
+adb shell input keyevent 26
+
+靜音：
+adb shell input keyevent 164
+
+查看内存信息：
+adb shell vmstat
+
+输出屏幕信息：
+adb shell dumpsys window displays
+
+打开系统桌面
+adb shell am start -n com.android.Launcher3/com.android.Launcher3.Launcher
+adb shell am start -n com.android.launcher3/.Launcher
+
+wifi 设置
+adb shell am start -a android.settings.WIFI_SETTINGS
+
+打开系统设置界面
+adb shell am start -a android.settings.SETTINGS
+adb shell am start -n com.android.settings/com.android.settings.Settings
+
+打开音乐播放器页面
+adb shell am start -a android.intent.action.MUSIC_PLAYER
+
+打开相机
+adb shell am start -a android.media.action.STILL_IMAGE_CAMERA
+
+打开页面  --e ( s -> String  , i -> int )
+adb shell am start -n 包名/类全名 --es key value --ei key value
+
+输出系统中所有应用包名
+adb shell pm list packages > list.txt
+
+只输出系统的包
+adb shell pm list packages -s
+
+只输出第三方的包
+adb shell pm list packages -3
+
+停用应用（效果：设置->应用管理->全部中看不到这任何一个系统应用，也无法自启动、被唤醒、被人为启动）：
+
+	2-1、安卓5.x、6.x停用应用:
+	adb shell pm hide com.android.email
+
+	2-2、安卓7.x停用应用:
+	adb shell pm disable-user com.android.email
+
+启用应用： 
+adb shell pm unhide com.android.email
+
+查看存储空间使用情况：
+adb shell df
+
+统计页面的启动时间：
+adb logcat -s ActivityManager | grep "Displayed"
+
+查看进程
+adb shell
+ps | grep $pkgName
+
+
+
+java 工具：
+
+查看 apk 文件签名信息：
+java/bin/keytool：
+keytool -list -printcert -jarfile xx.apk
+
+360应用商店上架提示签名算法采用“SHA256withRSA”，在部分4.2一下安卓版本的手机上不能安装，
+解决办法：
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore D:\Android\keystore\newkey2.jks -signedjar D:\Android\多渠道输出\中小学辅导班_v4.0.0_49_deft_08041622_360移动市场_a.apk D:\Android\多渠道输出\中小学辅导班_v4.0.0_49_deft_08041622_360移动市场.apk sun

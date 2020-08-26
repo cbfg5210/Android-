@@ -1,0 +1,20 @@
+demo:替换匹配的内容为空格
+
+正则： 
+= (\d*)
+
+替换前:
+NATIONAL_CLASSIC = 1
+NURSERY_RHYMES = 2
+STORY_HOUSE = 3
+
+替换后:
+NATIONAL_CLASSIC
+NURSERY_RHYMES
+STORY_HOUSE
+
+
+
+
+找出.java、.xml文件中所有中文字符
+api接口正则替换

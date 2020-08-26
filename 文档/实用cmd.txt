@@ -1,0 +1,5 @@
+MD2/MD4/MD5/SHA1/SHA256/SHA384/SHA512校验：
+
+certutil -hashfile F:\下载\x.txt md5/sha256/...
+
+certutil -hashfile android-studio-ide-182.5314842-windows.exe sha256
