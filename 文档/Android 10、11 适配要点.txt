@@ -1,0 +1,19 @@
+Android 10、11 适配要点
+
+- 后台启动 Activity 失效
+
+场景：如果我们正在玩着游戏，此时手机后台可能有个下载某 App 的任务在执行。当 App 下载完之后突然弹出安装界面，中断了游戏界面的交互，这种情况会造成用户体验极差，而最终用户的吐槽对象都会转移到 Android 手机或者 Android 系统本身。
+Android10（API29）开始，对后台进程启动Activity做了一定限制，目的就是尽可能的避免当前前台用户的交互被打断，保证当前屏幕上涨势的内容不受影响。
+解决方法：
+Android官方建议我们使用通知来替代直接启动Activity操作。
+
+- Note
+
+如果应用通过升级安装，那么还会使用以前的储存模式（Legacy View）。只有通过首次安装或是卸载重新安装才能启用新模式（Filtered View）。
+所以在适配时，我们的判断代码如下：
+    // 使用Environment.isExternalStorageLegacy()来检查APP的运行模式
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && 
+        !Environment.isExternalStorageLegacy()) {
+    }
+
+这样的好处是你可以在用户升级后，能方便的将用户的数据移动至应用的特定目录。否则你只能通过SAF去移动，这样会非常麻烦。如果你要移动数据注意只适用于Android 10下，所以现在适配反而是一个好时机。当然如果你不需要迁移数据，那适配会更省事。
