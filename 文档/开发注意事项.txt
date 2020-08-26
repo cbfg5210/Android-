@@ -1,15 +1,27 @@
-Android 4.4 及以下版本涉及到分包的，要继承 MultiDexApplication，不然可能会找不到某个类导致崩溃，高版本则不会
+### 规范
+
+--多人开发的项目，写完代码记得格式化后再提交，避免出现代码格式造成的冲突，影响代码合并效率。(各方的格式化规则要一致，最好不要自定义格式化规则，直接使用默认的就好)
 
 
---多人开发的项目，写完代码记得格式化后再提交，避免出现代码格式造成的冲突，影响代码合并效率。
 
+### 注意点
+
+--如果模块不需要使用到 BuildConfig 的话，可以在 build.gradle 中关闭生成
+
+afterEvaluate {
+    generateDebugBuildConfig.enabled = false
+    generateReleaseBuildConfig.enabled = false
+}
+
+
+--Android 4.4 及以下版本涉及到分包的，要添加 MultiDex 依赖并且继承 MultiDexApplication(或者调用 MultiDex.install)，不然可能会因为找不到某个类导致崩溃，5.0及以上版本则不会(如果项目的 minSdkVersion 为 21 或更高的值，则默认情况下会启用 MultiDex，并且不需要 MultiDex 支持库)
 
 
 --跳转第三方apk，如果是通过包名+类名跳转的话以后可能有问题，如果新版本的apk类名修改了的话就无法跳转了。
 
 解决：
-首先通过包名来找对应的launcher页Intent，找到的话就跳转，如果没有找到的话就通过包名+类名来跳转，
-另外，跳转第三方apk的Intent要加上FLAG_NEW_TASK，避免第三方apk崩溃影响主应用。
+首先通过包名来找对应的 launcher 页 Intent，找到的话就跳转，如果没有找到的话就通过包名+类名来跳转，
+另外，跳转第三方apk的 Intent 要加上 FLAG_NEW_TASK，避免第三方 apk 崩溃影响主应用。
 
 代码：
  val appStoreIntent = context.packageManager
@@ -19,10 +31,10 @@ Android 4.4 及以下版本涉及到分包的，要继承 MultiDexApplication，
 
 
 
---使用BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME要注意：如果build.gradle中是动态配置应用的版本号、版本名的话，BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME获取到的版本号、版本名可能和真实的不一致，这种情况下不能直接使用BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME。
+--使用 BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME 要注意：如果 build.gradle 中是动态配置应用的版本号、版本名的话，BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME 获取到的版本号、版本名可能和真实的不一致，这种情况下不能直接使用 BuildConfig.VERSION_CODE、BuildConfig.VERSION_NAME。
 
 
---使用BuildConfig.DEBUG要注意：子模块中获取的BuildConfig.DEBUG可能始终为false。
+--使用 BuildConfig.DEBUG 要注意：子模块中获取的 BuildConfig.DEBUG 可能始终为false。
 
 原因：
 BuildConfig.java 是编译时自动生成的，并且每个 Module 都会生成一份，以该 Module 的 packageName 为 BuildConfig.java 的 packageName。所以如果你的应用有多个 Module 就会有多个 BuildConfig.java 生成，而上面的 Lib Module import 的是自己的 BuildConfig.java，编译时被依赖的 Module 默认会提供 Release 版给其他 Module 或工程使用，这就导致该 BuildConfig.DEBUG 会始终为 false。
